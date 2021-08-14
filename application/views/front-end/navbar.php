@@ -38,7 +38,7 @@
               <li><a href="#organisasi">Info Organisasi</a></li>
               <li><a href="#dades">Info Data Desa</a></li>
               <li><a href="#layanan">Info Layanan</a></li>
-              <li><a href="#!">Masuk</a></li>
+              <li><a href="<?=base_url('auth')?>">Masuk</a></li>
             </ul>
           </div>
         </div>
@@ -52,5 +52,5 @@
       <li><a href="#organisasi">Info Organisasi</a></li>
       <li><a href="#dades">Info Data Desa</a></li>
       <li><a href="#layanan">Info Layanan</a></li>
-      <li><a href="#!">Masuk</a></li>
+      <li><a href="<?=base_url('auth')?>">Masuk</a></li>
     </ul>

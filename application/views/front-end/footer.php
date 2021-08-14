@@ -2,9 +2,6 @@
     <footer class="indigo darken-2 white-text center">
       <p class="flow-text">Sistem Informasi Kantor Desa Melayu. Copyright 2020.</p>
     </footer>
-
-
-
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="<?=base_url('asset/beranda/');?>js/materialize.min.js"></script>
     <script>

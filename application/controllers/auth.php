@@ -1,6 +1,11 @@
 <?php
 class Auth extends CI_Controller
 {
+    public function __construct(Type $var = null) {
+        $this->var = $var;
+    }
+
+    
     public function index()
     {
         $data = [

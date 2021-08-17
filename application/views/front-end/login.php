@@ -30,7 +30,6 @@
     <div class="login-box">
         <div class="card">
             <div class="body">
-                <?= $this->session->flash_data('pesan');?>
                 <form id="sign_in" method="POST" actiion="<?=base_url('auth/proses_login')?>" >
                     <h2 class="msg">MASUK</h2>
                     <div class="input-group">

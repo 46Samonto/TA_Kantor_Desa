@@ -30,14 +30,15 @@
     <div class="login-box">
         <div class="card">
             <div class="body">
-                <form id="sign_in" method="POST">
+                <?= $this->session->flash_data('pesan');?>
+                <form id="sign_in" method="POST" actiion="<?=base_url('auth/proses_login')?>" >
                     <h2 class="msg">MASUK</h2>
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="material-icons">person</i>
                         </span>
                         <div class="form-line">
-                            <input type="text" class="form-control" name="username" placeholder="No E-Ktp" required autofocus>
+                            <input type="text" class="form-control" name="nik" placeholder="No E-Ktp" required autofocus>
                         </div>
                     </div>
                     <div class="input-group">

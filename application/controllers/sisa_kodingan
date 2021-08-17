@@ -1,0 +1,684 @@
+ ?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+ 
+class aut_user extends CI_Controller {
+    function __construct(){
+        parent::__construct();
+        $this->load->model('Auth/Mcrud');
+    }
+
+    public function index()
+    {  
+        $data ['judul'] = 'Halaman Utama'; 
+        $this->load->view('home/conn', $data);
+    } 
+
+    public function sigup()
+    {
+        $this->form_validation->set_rules('nik','Nik','required');
+        $this->form_validation->set_rules('nama','Nama','required');
+        $this->form_validation->set_rules('email','Email','required');
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[15]');  
+        $this->form_validation->set_rules('confirmpswd', 'Password Confirmation', 'required|matches[password]'); 
+
+        if ($this->form_validation->run() == FALSE) {
+
+            $data ['judul'] = 'Registrasi'; 
+            $this->load->view('auth/auth_user/nav_login', $data);
+            $this->load->view('auth/auth_user/sighup');
+            $this->load->view('auth/admin/footer');
+
+        } else 
+        {
+            $nik        = $_POST['nik'];  
+            $nama       = $_POST['nama'];  
+            $email      = $_POST['email'];  
+            $password   = $_POST['password'];  
+            $passhash   = hash('md5', $password);  
+            $saltid     = md5($email);
+            $role_id    = 'Masyarakat';
+            $active     = 1;
+
+            $data = array(
+                'nik'               => $nik,
+                'namapenduduk'      => $nama,
+                'email'             => $email,
+                'password'          => $passhash,
+                'role_id'           => $role_id,
+                'is_active'         => $active
+            );
+            if ($this->Mcrud->sigup_user($data)) {
+                if ($this->sendemail($email, $saltid)) {
+                    $this->session->set_flashdata('msg','<div class="alert alert-success text-center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Silahkan, Cek Email Untuk melakukan verifikasi</div>');
+                    redirect(base_url('daftar'));
+                }
+                else {
+                    $this->session->set_flashdata('msg','<div class="alert alert-danger text-center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Maaf, Silahkan Periksa Kembali Email Anda</div>');
+                    redirect(base_url('daftar'));
+                }
+            }
+            else {
+                $this->session->set_flashdata('msg','<div class="alert alert-dismissible alert-danger text-center">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                Maaf, Seilahkan di coba lagi.</div>');  
+                redirect(base_url('daftar'));
+            }
+        }
+
+    }
+    public function sendemail($email, $saltid)
+    {
+        //configurasi Email
+        $config['protocol']     = 'smtp';  
+        $config['smtp_host']    = 'ssl://smtp.gmail.com'; //smtp host name  
+        $config['smtp_port']    = '465'; //smtp port number  
+        $config['smtp_timeout']= "400";
+        $config['smtp_user']    = 'tree.sutrisno997@gmail.com';  
+        $config['smtp_pass']    = 'trisno0977'; //$form_email password  
+        $config['mailtype']     = 'html';  
+        $config['charset']      = 'iso-8859-1';   
+        $config['wordwrap']     = TRUE;  
+        $config['newline']      = "\r\n"; //use double quotes  
+        $this->email->initialize($config);  
+        $url = base_url()."aut_user/confirmation/".$saltid;  
+        $this->email->from('tree.sutrisno997@gmail.com', 'Kantor Desa Melayu');
+        $this->email->to($email);
+        $this->email->subject('Hallo.. Warga Desa Melayu, Selamat Datang Di Website Desa Melayu Kecamatan Lambu Kabupaten Bima');
+        $message = "<html><head><head></head><body><p>Hi, Penduduk Desa Melayu :) </p></p><p>Terimahkasih sudah melakukan verifikasi email dengan Website Kantor Desa Melayu.</p><p>di mohon segera  klik link yang ada di bawah ini untuk segara login dan menikmati fasilitas layanan online kami.</p>".$url."<br/><p>Terimakasih dan selamat bergabung,</p><p>Website Kantor Desa Melayu</p></body></html>";  
+        $this->email->message($message);  
+        return $this->email->send();
+    }
+
+    public function confirmation($key)
+    {
+        if ($this->Mcrud->verifyemail($key)) {
+            $this->session->set_flashdata('msg','<div class="alert alert-success text-center">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            Selamat!, emailnya berhasil di verifikasi dan silahkan masuk</div>');
+            redirect(base_url('masuk'));
+        }
+        else {
+            $this->session->set_flashdata('msg','<div class="alert alert-danger text-center">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            Data / Email Tidak Lengkap...</div>');  
+            redirect(base_url('masuk'));  
+        }
+    }
+
+    public function login()
+    {
+        $data ['judul'] = 'User Login'; 
+        $this->load->view('auth/auth_user/nav_login', $data);
+        $this->load->view('auth/auth_user/login');
+        $this->load->view('auth/admin/footer');
+    }
+
+    public function proses_login()
+    { 
+        $nik        = $this->input->post('nik');
+        $password   = $this->input->post('password');
+        $role       = $this->input->post('role_id');
+
+        $this->form_validation->set_rules('nik','Nik','trim|required');
+        $this->form_validation->set_rules('password','Password','trim|required');
+
+        if ($this->form_validation->run() == FALSE) {
+
+            $this->session->set_flashdata('pesan','<div class="alert alert-danger text-center">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            Nik atau password salah</div>');
+
+            redirect ('masuk','refresh');
+        } else {
+
+            $Nik    = $nik;
+            $pass   = md5($password);
+            $rol    = $role;
+
+            $cek_db = $this->Mcrud->login($Nik, $pass, $rol);
+            if ($cek_db) {
+
+                foreach ($cek_db as $row) {
+                    $sess_data['nik']            = $row->nik;
+                    $sess_data['password']       = $row->password;
+                    $sess_data['role_id']        = $row->role_id;
+                    $this->session->set_userdata($sess_data);
+                }
+                if ($sess_data['role_id'] == 'Admin'){
+                    redirect('admin');
+                }
+                if ($sess_data['role_id'] == 'Operator'){
+                    redirect('admin');
+                }else {
+                    
+                    $this->session->set_flashdata('pesan','<div class="alert alert-danger text-center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>NIK / Password Salah.</div>');
+                    redirect('masuk');
+                }
+                
+            }
+            else {
+                $this->session->set_flashdata('pesan','<div class="alert alert-danger text-center">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Di Mohon Melakukan Verifikasi melalui Operator Sistem ini.</div>');
+                redirect('masuk'); 
+            }
+        }
+    }
+
+    public function forgot()
+    {
+        $data ['judul'] = 'reset Password'; 
+        $this->load->view('auth/auth_user/nav_login', $data);
+        $this->load->view('auth/auth_user/riset');
+        $this->load->view('auth/admin/footer');
+    }
+    public function reset()
+    {
+        
+    }
+    public function profile()
+    {
+        $model['data_tabel'] = $this->Mcrud->tampil_edit(); 
+        $data ['judul'] = 'Halaman Profile'; 
+        $this->load->view('home/navbar', $data);
+        $this->load->view('home/profile/index',$model);
+        $this->load->view('home/footer');
+    }
+
+    public function Layanan()
+    {
+        $model['data_tabel'] = $this->Mcrud->tampil_surat(); 
+        $data ['judul'] = 'Layanan Surat'; 
+        $this->load->view('home/navbar', $data);
+        $this->load->view('home/layanan/index',$model);
+        $this->load->view('home/footer');
+    }
+    public function autofill()
+    {
+        $model['nik']    = $this->Mcrud->get_penduduk(); 
+        // $model['syarat'] = $this->Mcrud->get_syarat($idsurat); 
+        // $model['isi']    = $this->Mcrud->satuData_layanan_surat($idsurat); 
+        $data ['judul']  = 'Layanan Surat'; 
+        $this->load->view('home/navbar', $data);
+        $this->load->view('home/layanan/autofill',$model);
+        $this->load->view('home/footer');
+    }
+
+    public function proses_autofill()
+    {
+       $keyword=$this->input->post('nik');
+       $data=$this->Mcrud->get_Autofill($keyword); 
+       if( $data->num_rows()) {
+            $result = $data->result();
+            foreach( $result as $row )
+            {
+                $result_array = array(
+                    'label'         => $row->nik,
+                    'namapenduduk'  => $row->namapenduduk,
+                    'ttl'           => $row->ttl,
+                    'tgllahir'      => $row->tgllahir,
+                    'jk'            => $row->jk,
+                    'agama'         => $row->agama,
+                    'pekerjaan'     => $row->pekerjaan,
+                    'namadusun'     => $row->namadusun,
+                    'rt'            => $row->rt,
+                    'rw'            => $row->rw
+                );
+                echo json_encode($result_array);
+            }
+       }
+       
+    }
+    public function pamdes()
+    {
+        $model['data_tabel'] = $this->Mcrud->tampil_edit(); 
+        $data ['judul'] = 'Halaman Profile'; 
+        $this->load->view('home/navbar', $data);
+        $this->load->view('home/pemdes/index',$model);
+        $this->load->view('home/footer');
+    }
+    public function dades()
+    {
+        $model['jml_dusun']     = $this->Mcrud->Coun_wilayah_dusun();
+        $model['jml_penduduk']  = $this->Mcrud->count_penduduk();
+        $model['jml_kk']        = $this->Mcrud->count_kk();
+        $model['jml_surat']     = $this->Mcrud->count_surat();
+        $model['dusun']     = $this->Mcrud->tampil_dusun();
+        // $model['data_tabel'] = $this->Mcrud->data_grafik(); 
+        $data ['judul'] = 'Info Data Layanan'; 
+        $this->load->view('home/navbar', $data);
+        $this->load->view('home/dades/index',$model);
+        $this->load->view('home/footer');
+    }
+}
+ 
+<?php
+class auth extends  CI_controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('Auth/Mcrud');
+        $this->load->helper(array('form', 'url'));
+        loged();
+    }
+
+    public function admin()
+    {
+        $model['jml_dusun']     = $this->Mcrud->Coun_wilayah_dusun();
+        $model['jml_penduduk']  = $this->Mcrud->count_penduduk();
+        $model['jml_kk']        = $this->Mcrud->count_kk();
+        $model['jml_arsip']     = $this->Mcrud->count_arsip();
+        $model['jml_laki']      = $this->Mcrud->count_laki();
+        $model['jml_perempuan'] = $this->Mcrud->count_perempuan();
+        $model['jml_domisili']   = $this->Mcrud->count_domisili();
+        $model['jml_surat']     = $this->Mcrud->count_surat();
+        $model['jml_ketusaha']  = $this->Mcrud->count_ket_usaha();
+        $model['jml_operator']  = $this->Mcrud->count_operator();
+        $model['data_tabel']    = $this->Mcrud->tampil_edit();
+        $data = $this->Mcrud->ambil_data($this->session->userdata ['nik']);
+        $data = array(
+            'namapenduduk'  => $data->namapenduduk,
+            'foto'          => $data->foto,
+            'role_id'       => $data->role_id);
+        $judul ['judul']    = 'Halaman Admin'; 
+        $data['data_tabel'] = $this->Mcrud->tampil_surat();
+        $this->load->view('auth/admin/navbar',$judul);
+        $this->load->view('auth/admin/aside',$data);
+        $this->load->view('auth/admin/sidebar',$model);
+        $this->load->view('auth/admin/footer');
+    }
+    
+    public function logout()
+    {
+        $id = $this->session->userdata('nik');
+        date_default_timezone_set('Asia/Makassar');
+        $data = array('terakhir_login' => date('Y-m-d H-i-s'));
+        $this->Mcrud->logout($data,$id);
+        $this->session->sess_destroy();
+        redirect(site_url().'utama');
+    }
+
+    public function profile_admin()
+    {
+        $get = $this->Mcrud->ambil_data($this->session->userdata ['nik']);
+        $id ['isi']= $this->Mcrud->satuData_profile($this->session->userdata['nik']);
+        if (!isset($get)) {
+            redirect('masuk');
+        } else {
+            $id['isi'] = $get;
+            $id['isi'] = $id['isi'];
+            $data = array(
+                'idpenduduk'        => $get->idpenduduk,
+                'namapenduduk'      => $get->namapenduduk,
+                'foto'              => $get->foto,
+                'role_id'           => $get->role_id
+            );
+            $judul ['judul']        = 'Profile';
+            $data['data_tabel']    = $this->Mcrud->tampil_surat();
+            $this->load->view('auth/admin/navbar',$judul);
+            $this->load->view('auth/admin/aside',$data);
+            $this->load->view('auth/admin/profile',$id);
+            $this->load->view('auth/admin/footer');
+
+            if (isset($_POST['btnSimpan'])) {
+                $namapenduduk       = htmlentities(strip_tags($this->input->post('namapenduduk')));
+                $email              = htmlentities(strip_tags($this->input->post('email')));
+    
+                $data = array(
+                    'namapenduduk'  => $namapenduduk,
+                    'email'         => $email
+                );
+                $this->Mcrud->ubah_penduduk($data);
+                $this->session->set_flashdata('msg',
+                '
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;&nbsp; &nbsp;</span>
+                            </button>
+                            <strong>Sukses!</strong> Profile berhasil disimpan.
+                    </div>'
+                );
+                redirect('auth/profile_admin','refresh');
+             }
+        }       
+    }
+
+    public function edit_profile_admin()
+    {
+        $input = $this->input->post('txt_idpenduduk');
+        $this->form_validation->set_rules('namapenduduk', 'Namapenduduk', 'trim|required|min_length[2]|max_length[15]');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|min_length[8]|max_length[50]');
+        $this->form_validation->set_rules('foto', 'Foto', 'trim|required');
+
+        $config['upload_path']      = './asset/img/uploads/masyarakat/';
+        $config['allowed_types']    = 'jpg|png|gif|jpeg';
+        $config['max_size']         = '10000';
+
+        $this->upload->initialize($config);
+
+        if (!$this->upload->do_upload('foto')) {
+            echo "<script>alert('Foto profile tidak dapat di perbarui?');</script>";
+            redirect('auth/profile_admin', 'refresh');
+        } else 
+            {
+                $foto                = $this->upload->data();
+                $foto                = $foto['file_name'];
+                $data = Array(
+                    'nik'           => $this->input->post('nik'),
+                    'namapenduduk'  => $this->input->post('namapenduduk'),
+                    'role_id'       => $this->input->post('role_id'),
+                    'email'         => $this->input->post('email'),
+                    'foto'          => $foto
+                );
+               $db = $this->Mcrud->ubah_penduduk($data,$input);
+                if ($db > 0) {
+                    $this->session->set_flashdata('msg', '<div class="alert alert-success text-center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Sukses di perbarui...</div>');
+                } else {
+                      $this->session->set_flashdata('msg', '<div class="alert alert-danger text-center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Sukses di perbarui...</div>');
+                }
+              
+                redirect('auth/profile_admin','refresh');
+        }
+    }
+
+    public function updatePassword()
+    {
+        $input = $this->input->post('txt_idpenduduk');
+        $this->form_validation->set_rules('passwordNew', 'Password', 'trim|required|min_length[5]|max_length[25]');
+        $this->form_validation->set_rules('passwordConf', 'PasswordConf', 'trim|required|min_length[5]|max_length[25]');
+
+        $this->session->userdata('nik');
+        $pass1 = $this->input->post('passwordNew');
+        $pass2 = $this->input->post('passwordConf');
+
+        if ($this->form_validation->run() == true) {
+            if ($pass1 != $pass2) {
+                $this->session->set_flashdata('msg', '<div class="alert alert-danger text-center">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                Kata Sandi Harus Sama...</div>');
+                redirect('auth/profile_admin');
+            } else {
+                $post = array('password' => hash('md5',$pass1));
+                $db   = $this->Mcrud->ubah_penduduk($post,$input);
+                if ($db == true) {
+                    $this->session->set_flashdata('msg', '<div class="alert alert-success text-center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Kata sandi baru berhasil diubah...</div>');
+                    redirect('auth/profile_admin');
+                } else {
+                    $this->session->set_flashdata('msg', '<div class="alert alert-danger text-center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Kata sandi gagal diubah...</div>');
+                    redirect('auth/profile_admin');
+                }
+            }
+         
+        } else {
+ 
+            $this->session->set_flashdata('msg', '<div class="alert alert-info text-center">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            Kata Sandi Baru min. 5 digit & Max 25 digit...</div>');
+            redirect('auth/profile_admin');
+        }
+    
+    }
+
+    public function akses_user_menu()
+    {
+        $data = $this->Mcrud->ambil_data($this->session->userdata ['nik']);
+        $model['data_tabel'] = $this->Mcrud->user_akses();
+        $model['tambah_akses'] = $this->Mcrud->tampil_penduduk();
+        $data = array(
+            'namapenduduk'  => $data->namapenduduk,
+            'foto'          => $data->foto,
+ 
+            'role_id'       => $data->role_id);
+        $judul ['judul']    = 'User Akses'; 
+        $data['data_tabel']    = $this->Mcrud->tampil_surat();
+        $this->load->view('auth/admin/navbar',$judul);
+        $this->load->view('auth/admin/aside',$data);
+        $this->load->view('auth/auth_user/hak_akses',$model);
+        $this->load->view('auth/admin/footer');
+    }
+    public function tambah_user_akses()
+    {
+        $data = $this->Mcrud->ambil_data($this->session->userdata ['nik']);
+        $model['tambah_akses'] = $this->Mcrud->get_user_akses();
+        $data = array(
+            'namapenduduk'  => $data->namapenduduk,
+            'foto'          => $data->foto,
+            'role_id'       => $data->role_id);
+        $judul ['judul']    = 'User Akses'; 
+        $data['data_tabel']    = $this->Mcrud->tampil_surat();
+        $this->load->view('auth/admin/navbar',$judul);
+        $this->load->view('auth/admin/aside',$data);
+        $this->load->view('auth/auth_user/tambah_user',$model);
+        $this->load->view('auth/admin/footer');
+
+    }
+    
+    public function proses_tambah_user()
+    {
+        $id         = $this->input->post('akses');
+        $input      = $this->input->post('role_id');
+        $password   = $this->input->post('katasandi');
+        $data   = [
+                    'role_id'  => $input,
+                    'password' => hash('md5',$password)
+                ];
+        $this->Mcrud->ubah_penduduk($data, $id);
+        redirect('auth/akses_user_menu','refresh');
+    }
+    public function proses_edit_user()
+    {
+        $id         = $this->input->post('txt_role');
+        $input      = $this->input->post('role_id');
+        $password   = $this->input->post('katasandi');
+        $data   = [
+                    'role_id'  => $input,
+                    'password' => hash('md5',$password)
+                ];
+        $this->Mcrud->ubah_penduduk($data, $id);
+        redirect('auth/akses_user_menu','refresh');
+    }
+} <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class BlockedController extends CI_Controller {
+
+    public function __construct()
+    {
+        parent::__construct();
+        //Load Dependencies
+        
+    }
+    public function index()
+    {
+        $data ['judul'] = 'ERORR'; 
+        $this->load->view('auth/auth_user/nav_login', $data);
+        $this->load->view('auth/auth_user/error');
+        $this->load->view('auth/admin/footer');
+    }
+}
+<?php
+class main extends CI_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('Auth/Mcrud');
+        $this->load->library('form_validation');
+        $this->load->helper(array('form', 'url'));
+        $this->load->library('upload');
+        loged();
+    }
+
+    public function index()
+    {   
+        $model['data_tabel'] = $this->Mcrud->tampil_edit();
+        $data = $this->Mcrud->ambil_data($this->session->userdata ['nik']);
+        $data = array(
+            'namapenduduk'  => $data->namapenduduk,
+            'foto'          => $data->foto,
+            'role_id'       => $data->role_id);
+        $judul ['judul']         = 'Profile Desa'; 
+        $data['data_tabel']    = $this->Mcrud->tampil_surat(); 
+        $this->load->view('auth/admin/navbar',$judul);
+        $this->load->view('auth/admin/aside',$data);
+         $this->load->view('auth/conten/info/sid/index',$model);
+        $this->load->view('auth/admin/footer');    
+    }
+
+    public function edit_proses()
+    {
+        $config['upload_path']      = './asset/img/uploads/sid/';
+        $config['allowed_types']    = 'jpg|png|gif|jepg';
+        $config['max_size']         = '10000';
+
+        $this->upload->initialize($config);
+        if ( ! $this->upload->do_upload('foto2')){
+            $namadesa          = $this->input->post('nama_desa', TRUE);
+            $kodedesa          = $this->input->post('kode_desa', TRUE);
+            $kodepos           = $this->input->post('kode_pos', TRUE);
+            $kepaladesa        = $this->input->post('nama_kepala_desa', TRUE);
+            $nipkepaladesa     = $this->input->post('nip_kepala_desa', TRUE);
+            $alamatkantordesa  = $this->input->post('alamat_kantor', TRUE);
+            $emailkantordesa   = $this->input->post('email_desa', TRUE);
+            $telepon           = $this->input->post('telepon', TRUE);
+            $webdesa           = $this->input->post('website', TRUE);
+            $namakabupaten     = $this->input->post('nama_kabupaten', TRUE);
+            $namakecamatan     = $this->input->post('nama_kecamatan', TRUE);
+            $wilayahdusun      = $this->input->post('wilayah_dusun', TRUE);
+
+            $data = array(
+                'namadesa'          => $namadesa,
+                'kodedesa'          => $kodedesa,
+                'kodepos'           => $kodepos,
+                'kepaladesa'        => $kepaladesa,
+                'nipkepaladesa'     => $nipkepaladesa,
+                'alamatkantordesa'  => $alamatkantordesa,
+                'emailkantordesa'   => $emailkantordesa,
+                'telepon'           => $telepon,
+                'webdesa'           => $webdesa,
+                'namakecamatan'     => $namakecamatan,
+                'namakabupaten'     => $namakabupaten,
+                'wilayahdusun'      => $wilayahdusun
+                );
+                $this->Mcrud->simpanEdit($data);
+                $this->session->set_flashdata('pesan','<div class="alert alert-success text-center">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Sukses di perbarui</div>');
+                redirect('profile', 'refresh');
+            }
+            else {
+                    $foto2=$this->upload->data();
+                    $foto2= $foto2['file_name'];
+                    $namadesa          = $this->input->post('nama_desa', TRUE);
+                    $kodedesa          = $this->input->post('kode_desa', TRUE);
+                    $kodepos           = $this->input->post('kode_pos', TRUE);
+                    $kepaladesa        = $this->input->post('nama_kepala_desa', TRUE);
+                    $nipkepaladesa     = $this->input->post('nip_kepala_desa', TRUE);
+                    $alamatkantordesa  = $this->input->post('alamat_kantor', TRUE);
+                    $emailkantordesa   = $this->input->post('email_desa', TRUE);
+                    $telepon           = $this->input->post('telepon', TRUE);
+                    $webdesa           = $this->input->post('website', TRUE);
+                    $namakabupaten     = $this->input->post('nama_kabupaten', TRUE);
+                    $namakecamatan     = $this->input->post('nama_kecamatan', TRUE);
+                    $wilayahdusun      = $this->input->post('wilayah_dusun', TRUE);
+        
+                    $data = array(
+                        'namadesa'          => $namadesa,
+                        'kodedesa'          => $kodedesa,
+                        'kodepos'           => $kodepos,
+                        'kepaladesa'        => $kepaladesa,
+                        'nipkepaladesa'     => $nipkepaladesa,
+                        'alamatkantordesa'  => $alamatkantordesa,
+                        'emailkantordesa'   => $emailkantordesa,
+                        'telepon'           => $telepon,
+                        'webdesa'           => $webdesa,
+                        'namakecamatan'     => $namakecamatan,
+                        'namakabupaten'     => $namakabupaten,
+                        'wilayahdusun'      => $wilayahdusun,
+                        'foto2'             => $foto2
+                        );
+                    $this->Mcrud->simpanEdit($data);
+                    $this->session->set_flashdata('pesan','<div class="alert alert-success text-center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Sukses di perbarui...</div>');
+                    redirect('profile', 'refresh');
+                }
+    }
+    //================== BIODATA DESA MELAYU ================================================//
+    public function bio()
+    { 
+        $model['data_tabel'] = $this->Mcrud->tampil_edit();
+        $data = $this->Mcrud->ambil_data($this->session->userdata ['nik']);
+        $data = array(
+            'namapenduduk'  => $data->namapenduduk,
+            'foto'          => $data->foto,
+            'role_id'       => $data->role_id);
+        $data['judul'] = 'Struktur Pemerintahan';
+        $data['data_tabel']    = $this->Mcrud->tampil_surat(); 
+        $this->load->view('auth/admin/navbar',$data);
+        $this->load->view('auth/admin/aside',$data);
+        $this->load->view('auth/conten/info/sid/bio',$model);
+        $this->load->view('auth/admin/footer');    
+    }
+
+    public function pros_tambah_bio()
+    {
+        $config['upload_path']      = './asset/img/uploads/sid/';
+        $config['allowed_types']    = 'jpg|png|gif|jpeg';
+        $config['max_size']         = '10000';
+        $this->upload->initialize($config);
+        if ( ! $this->upload->do_upload('foto1')){
+            $this->session->set_flashdata('pesan','<div class="alert alert-danger text-center">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            File Foto Kosong...</div>');
+            }
+            else {
+                $foto3=$this->upload->data();
+                $foto3= $foto3['file_name'];
+                $visimisi          = $this->input->post('visi_misi', TRUE);
+                $data = array(
+                    'visi_misi'     => $visimisi,
+                    'foto1 '         => $foto3
+                );
+                $this->Mcrud->simpanEdit($data);
+                $this->session->set_flashdata('pesan','<div class="alert alert-success text-center">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                Sukses di perbarui...</div>');
+                redirect('pemerintahan', 'refresh');
+            }  
+    }
+
+    public function bio_edit()
+    {
+        $data = $this->Mcrud->ambil_data($this->session->userdata ['nik']);
+        $data = array(
+            'namapenduduk'  => $data->namapenduduk,
+            'foto'          => $data->foto,
+            'role_id'       => $data->role_id);
+        $data['judul'] = 'Struktur Pemerintahan';
+        $data['data_tabel']    = $this->Mcrud->tampil_surat(); 
+        $this->load->view('auth/admin/navbar',$data);
+        $this->load->view('auth/admin/aside',$data);
+        $this->load->view('auth/conten/info/sid/edit_bio');
+        $this->load->view('auth/admin/footer');    
+    }
+}
+
+
+
+ 
+
+
+}

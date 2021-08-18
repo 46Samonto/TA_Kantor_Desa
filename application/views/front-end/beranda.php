@@ -33,17 +33,14 @@
           <h3 class="center light grey-text text-darken-3">TENTANG DESA MELAYU</h3>
           <div class="col m6 light">
             <h5 class="center">INFORMASI SEJARAH DESA MELAYU</h5>
-            <p style="margin: justify;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi quo accusantium repellat similique ipsa doloribus in aliquam earum eaque, possimus necessitatibus sunt repellendus ullam recusandae voluptas dolore debitis saepe facere.</p><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  </p>
+            <p style="margin: justify;">Dengan dasar hukum yang ada dan hasil musyawarah seluruh masyarakat pada saat itu maka semua dusun melayu akan merubah statusnya menjadi Desa Melayu yang di dirikan yaitu pada tanggal 9 november 2006 berdasarkan Surat Keputusan Bupati Bima Nomor : 711 Tahun 2006 maka di angkatlaah Abdul Gani sebagai pejabat kepala desa melayu sampai terpilihnya kepala desa difinitif yaitu Abd. Haris H. Husen, S.E selaku kepala desa pertama di Desa Melayu Kecamatan Lambu. Sejak itupula desa melayu menata diri dan memanfaatkan seluruh potensi wilayah yang ada serta penataan sistem administrasi pemerintah sebagai eksitensi dan sebuah desa yang mandiri sampai sekarang ini. Berikut urutan kepemimpinan Desa Melayu :</p> <br>
+            <p>Abd. Haris H. Husen, S.E</p>
+            <p>Muhide S.Ag</p> 
           </div>
           <div class="col m6 light">
             <h5 class="center">INFORMASI WILAYAH ADMINISTRASI DESA MELAYU</h5>
             <div class="center">
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15780.188417536914!2d118.99484577718559!3d-8.59146980120105!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2db598d9de817179%3A0xa81f242042f3c0bd!2sMelayu%2C%20Lambu%2C%20Bima%2C%20West%20Nusa%20Tenggara!5e0!3m2!1sen!2sid!4v1628490279472!5m2!1sen!2sid" width="300px" height="250px" style="border:2;" allowfullscreen="" loading="lazy"></iframe>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15780.188417536914!2d118.99484577718559!3d-8.59146980120105!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2db598d9de817179%3A0xa81f242042f3c0bd!2sMelayu%2C%20Lambu%2C%20Bima%2C%20West%20Nusa%20Tenggara!5e0!3m2!1sen!2sid!4v1628490279472!5m2!1sen!2sid" width="450px" height="320px" style="border:2;" allowfullscreen="" loading="lazy"></iframe>
             </div>
           </div>
         </div>

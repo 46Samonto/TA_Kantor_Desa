@@ -7,23 +7,23 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title><?=$title?></title>
     <!-- Favicon-->
-    <link rel="icon" href="<?=base_url('asset/admin');?>/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="<?=base_url('asset/template/');?>/favicon.ico" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap Core Css -->
-    <link href="<?=base_url('asset/admin');?>/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="<?=base_url('asset/template/');?>/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
 
     <!-- Waves Effect Css -->
-    <link href="<?=base_url('asset/admin');?>/plugins/node-waves/waves.css" rel="stylesheet" />
+    <link href="<?=base_url('asset/template/');?>/plugins/node-waves/waves.css" rel="stylesheet" />
 
     <!-- Animation Css -->
-    <link href="<?=base_url('asset/admin');?>/plugins/animate-css/animate.css" rel="stylesheet" />
+    <link href="<?=base_url('asset/template/');?>/plugins/animate-css/animate.css" rel="stylesheet" />
 
     <!-- Custom Css -->
-    <link href="<?=base_url('asset/admin');?>/css/style.css" rel="stylesheet">
+    <link href="<?=base_url('asset/template/');?>/css/style.css" rel="stylesheet">
 </head>
 
 <body class="login-page">
@@ -62,20 +62,20 @@
     </div>
 
     <!-- Jquery Core Js -->
-    <script src="<?=base_url('asset/admin');?>/plugins/jquery/jquery.min.js"></script>
+    <script src="<?=base_url('asset/template/');?>/plugins/jquery/jquery.min.js"></script>
 
     <!-- Bootstrap Core Js -->
-    <script src="<?=base_url('asset/admin');?>/plugins/bootstrap/js/bootstrap.js"></script>
+    <script src="<?=base_url('asset/template/');?>/plugins/bootstrap/js/bootstrap.js"></script>
 
     <!-- Waves Effect Plugin Js -->
-    <script src="<?=base_url('asset/admin');?>/plugins/node-waves/waves.js"></script>
+    <script src="<?=base_url('asset/template/');?>/plugins/node-waves/waves.js"></script>
 
     <!-- Validation Plugin Js -->
-    <script src="<?=base_url('asset/admin');?>/plugins/jquery-validation/jquery.validate.js"></script>
+    <script src="<?=base_url('asset/template/');?>/plugins/jquery-validation/jquery.validate.js"></script>
 
     <!-- Custom Js -->
-    <script src="<?=base_url('asset/admin');?>/js/admin.js"></script>
-    <script src="<?=base_url('asset/admin');?>/js/pages/examples/sign-in.js"></script>
+    <script src="<?=base_url('asset/template/');?>/js/template/.js"></script>
+    <script src="<?=base_url('asset/template/');?>/js/pages/examples/sign-in.js"></script>
 </body>
 
 </html>

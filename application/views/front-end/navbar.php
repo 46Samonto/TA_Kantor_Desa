@@ -5,6 +5,9 @@
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
+
+    <link rel="icon" href="<?=base_url('asset/beranda/img/Logo.png')?>" type="image/x-icon">
+    
     <link type="text/css" rel="stylesheet" href="<?=base_url('asset/beranda/');?>css/materialize.min.css"  media="screen,projection"/>
 
     <!-- my CSS -->

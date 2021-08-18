@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Selamat Datang | SIKD MELAYU</title>
+    <title><?= $title ?></title>
     <!-- Favicon-->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="<?=base_url('asset/beranda/img/Logo.png')?>" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -27,6 +27,9 @@
 
     <!-- Custom Css -->
     <link href="<?=base_url('asset/template/')?>css/style.css" rel="stylesheet">
+
+     <!-- JQuery DataTable Css -->
+    <link href="<?=base_url('asset/template/')?>plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="<?=base_url('asset/template/')?>css/themes/all-themes.css" rel="stylesheet" />

@@ -25,7 +25,7 @@
                 <ul class="list">
                     <li class="header text-center"><h4>MENU NAVIGASI</h4></li>
                     <li class="active">
-                        <a href="index.html">
+                        <a href="<?= base_url('user/dashboard/beranda')?>">
                             <i class="material-icons">home</i>
                             <span>Beranda</span>
                         </a>
@@ -37,17 +37,17 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="javascript:void(0);">
+                                <a href="<?=base_url('user/sistem_informasi/info_profil');?>">
                                     <span>Info Profil Kantor Desa</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0);">
+                                <a href="<?=base_url('user/sistem_informasi/Organisasi');?>">
                                     <span>Info Struktur Organisasi</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0);">
+                                <a href="<?= base_url('user/sistem_informasi/wilayah')?>">
                                     <span>Info Wilayah Adminstrasi</span>
                                 </a>
                             </li>
@@ -60,10 +60,10 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="#!">Informasi Penduduk</a>
+                                <a href="<?= base_url('user/kependudukan/penduduk')?>">Informasi Penduduk</a>
                             </li>
                             <li>
-                                <a href="#!">Informasi Kepala Keluarga</a>
+                                <a href="<?= base_url('user/kependudukan/keluarga')?>"">Informasi Kepala Keluarga</a>
                             </li>
                         </ul>
                     </li>
@@ -95,7 +95,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <i class="material-icons">perm_media</i>
+                            <i class="material-icons">account_box</i>
                             <span>USER MANEJEMEN</span>
                         </a>
                     </li>

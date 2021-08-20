@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title><?=$title?></title>
     <!-- Favicon-->
-    <link rel="icon" href="<?=base_url('asset/template/');?>/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="<?=base_url('asset/beranda/img/Logo.png');?>" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -30,7 +30,7 @@
     <div class="login-box">
         <div class="card">
             <div class="body">
-                <form id="sign_in" method="POST" actiion="<?=base_url('auth/proses_login')?>" >
+                <form id="sign_in" method="POST" action="<?=base_url('auth/proses_login')?>" >
                     <h2 class="msg">MASUK</h2>
                     <div class="input-group">
                         <span class="input-group-addon">
@@ -51,9 +51,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <button class="btn btn-block bg-pink waves-effect" type="submit">MASUK</button>
-                        </div>              
-                        <div class="col-lg-12 text-center">
-                            <a href="<?= base_url('Utama')?>">Kembali!</a>
+                            <button type="button" class="btn btn-block btn-warning waves-effect" onclick="history.back(-1)">KEMBALI</button>
                         </div>
                     </div>
                 </form>

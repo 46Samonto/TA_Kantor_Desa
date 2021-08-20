@@ -3,7 +3,7 @@
 {
     function __construct() {
         parent::__construct();
-        $this->load->model("Auth_M");
+        $this->load->model("auth_M");
     }
 
 
@@ -31,14 +31,15 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             Nik atau password salah</div>');
 
-            redirect ('masuk','refresh');
+            redirect ('auth','refresh');
         } else {
 
             $Nik    = $nik;
             $pass   = md5($password);
             $rol    = $role;
 
-            $cek_db = $this->Mcrud->login($Nik, $pass, $rol);
+            $cek_db = $this->auth_M->login($Nik, $pass, $rol);
+            // var_dump($cek_db); die();
             if ($cek_db) {
 
                 foreach ($cek_db as $row) {
@@ -47,23 +48,24 @@
                     $sess_data['role_id']        = $row->role_id;
                     $this->session->set_userdata($sess_data);
                 }
+                
                 if ($sess_data['role_id'] == 'Admin'){
-                    redirect('admin');
+                    redirect('user/dashboard');
                 }
                 if ($sess_data['role_id'] == 'Operator'){
-                    redirect('admin');
+                    redirect('user/dashboard');
                 }else {
                     
                     $this->session->set_flashdata('pesan','<div class="alert alert-danger text-center">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>NIK / Password Salah.</div>');
-                    redirect('masuk');
+                    redirect('auth');
                 }
                 
             }
             else {
                 $this->session->set_flashdata('pesan','<div class="alert alert-danger text-center">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Di Mohon Melakukan Verifikasi melalui Operator Sistem ini.</div>');
-                redirect('masuk'); 
+                redirect('auth'); 
             }
         }
     }

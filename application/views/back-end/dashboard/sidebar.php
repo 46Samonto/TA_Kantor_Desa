@@ -63,7 +63,7 @@
                                 <a href="<?= base_url('user/kependudukan/penduduk')?>">Informasi Penduduk</a>
                             </li>
                             <li>
-                                <a href="<?= base_url('user/kependudukan/keluarga')?>"">Informasi Kepala Keluarga</a>
+                                <a href="<?= base_url('user/kependudukan/keluarga')?>">Informasi Kepala Keluarga</a>
                             </li>
                         </ul>
                     </li>
@@ -74,16 +74,16 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="#!">Informasi Surat</a>
+                                <a href="<?= base_url('user/surat/info_surat')?>">Informasi Surat</a>
                             </li>
                             <li>
-                                <a href="#!">Informasi Pengaturan Surat</a>
+                                <a href="<?= base_url('user/surat/pengaturan_surat')?>">Informasi Pengaturan Surat</a>
                             </li>
                             <li>
-                                <a href="#!">Informasi Surat Kategori</a>
+                                <a href="<?= base_url('user/surat/kategori_surat')?>">Informasi Surat Kategori</a>
                             </li>
                             <li>
-                                <a href="#!">Informasi Syarat Surat</a>
+                                <a href="<?= base_url('user/surat/syarat_surat')?>">Informasi Syarat Surat</a>
                             </li>
                         </ul>
                     </li>

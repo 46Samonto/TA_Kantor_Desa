@@ -23,12 +23,12 @@
 
     <!-- navbar -->
     <div class="navbar-fixed">
-      <ul id="dropdown1" class="dropdown-content">
+      <!-- <ul id="dropdown1" class="dropdown-content">
         <li><a href="#!">one</a></li>
         <li><a href="#!">two</a></li>
         <li class="divider"></li>
         <li><a href="#!">three</a></li>
-      </ul>
+      </ul> -->
       <nav class="indigo darken-2">
         <div class="container">
           <div class="nav-wrapper">
@@ -36,11 +36,11 @@
             <a href="#home" class="brand-logo">DESA MELAYU</a>
             <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-              <li><a href="#beranda">Beranda</a></li>
-              <li><a href="<?//=base_url('utama/profil_desa');?>">Info Profil</a></li>
+              <li><a href="<?=base_url('utama');?>">Beranda</a></li>
+              <li><a href="<?=base_url('utama/profil_desa');?>">Info Profil</a></li>
               <li><a href="#organisasi">Info Organisasi</a></li>
-              <li><a href="#dades">Info Data Desa</a></li>
-              <li><a href="#layanan">Info Layanan</a></li>
+              <li><a href="<?=base_url('utama/dades');?>">Info Data Desa</a></li>
+              <li><a href="<?=base_url('utama/layanan');?>">Info Layanan</a></li>
               <li><a href="<?=base_url('auth')?>">Masuk</a></li>
             </ul>
           </div>

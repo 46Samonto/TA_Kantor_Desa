@@ -11,6 +11,13 @@
 
 			$this->load->view('back-end/informasi/organisasi', $data, FALSE);
 		}
+
+		function update(){
+
+			$data = [
+				
+			];
+		}
 	
 	}
 	

@@ -21,16 +21,23 @@
 			$this->load->view('back-end/informasi/profil_desa',$data , FALSE);
 		}
 	
-		// edit a new item
-		public function edit()
-		{
-	
-		}
-	
 		//Update one item
-		public function update( $id = NULL )
+		public function update()
 		{
-	
+			$get = $this->input;
+
+			$data = [
+				'namadesa' 	 => $get->post('namadesa'),
+				'kodedesa'   => $get->post('kodedesa'),
+				'kodepos'  	 => $get->post('kodepos'),
+				'kepaladesa' => $get->post('kepaladesa'),
+				'email'		 => $get->post('email'),
+				'telepon'	 => $get->post('telepon'),
+				'foto'		 => $get->post()
+			];
+
+			$this->m_profil_desa->update($data);
+			redirect('user/sistem_informasi/info_profil','refresh');
 		}
 	}
 	

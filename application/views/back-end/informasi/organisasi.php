@@ -25,9 +25,7 @@
                             <h4>STRUKTUR ORGANISASI PEMERINATHAN KANTOR DESA MELAYU</h4>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger right" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">edit</i> Perbarui
-                                    </a>
+                                   <button type="button" class="btn btn-sm btn-danger right waves-effect m-r-20"  data-toggle="modal" data-target="#defaultModal"> <i class="material-icons">edit</i> Perbarui</button>
                                 </li>
                             </ul>
                         </div>
@@ -39,6 +37,30 @@
                 </div>
             </div>
 
+             <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title text-center" id="defaultModalLabel">STRUKTUR ORGANISASI KANTOR DESA MELAYU</h4>
+                        </div>
+
+
+                        <div class="modal-body">
+                            <form action="<?= base_url('User/sistem_informasi/organisasi/update');?>" method="post">
+
+                                <label>Unggah Foto Struktur Organisasi</label>
+                                <input type="file" name="organisasi">
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn waves-effect bg-blue">Simpan</button>
+                                    <button type="button" class="btn waves-effect bg-brown" data-dismiss="modal">Keluar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 <?php $this->load->view('back-end/dashboard/footer.php');?>

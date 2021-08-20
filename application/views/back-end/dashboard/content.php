@@ -17,17 +17,17 @@
             </div>
 
 
-        <div class="row">
+        <div class="row clearfix">
             <!-- Widgets -->
-            <div class="row clearfix col-lg-6">
+            <div class="row  col-lg-6">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="info-box bg-red hover-expand-effect">
                         <div class="icon">
                             <i class="material-icons">person</i>
                         </div>
                         <div class="content">
-                            <div class="text">JUMLAH PENDUDUK LAKI-LAKI</div>
-                            <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></div>
+                            <div class="text">JUMLAH LAKI-LAKI</div>
+                            <div class="number count-to" data-from="0" data-to="" data-speed="15" data-fresh-interval="20"><?php echo $this->db->query("select jk from tbl_penduduk where jk ='Laki-Laki'")->num_rows(); ?></div>
                         </div>
                     </div>
                 </div>
@@ -39,8 +39,8 @@
                             <i class="material-icons">persone</i>
                         </div>
                         <div class="content">
-                            <div class="text">JUMLAH PENDUDUK PEREMPUAN</div>
-                            <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="text">JUMLAH PEREMPUAN</div>
+                            <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20"><?php echo $this->db->query("select jk from tbl_penduduk where jk ='Perempuan'")->num_rows(); ?></div>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH DUSUN</div>
-                            <div class="number count-to" data-from="0" data-to="243" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="243" data-speed="1000" data-fresh-interval="20"><?php echo $this->db->query("select*from tbl_dusun")->num_rows(); ?></div>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH PENDUDUK</div>
-                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"><?php echo $this->db->query("select*from tbl_penduduk")->num_rows(); ?></div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,9 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH KK</div>
-                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">
+                                <?php echo $this->db->query("select*from tbl_kk")->num_rows(); ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -90,7 +92,9 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH AKUN</div>
-                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">
+                                <?php echo $this->db->query("select role_id from tbl_penduduk where role_id = 'Admin'")->num_rows(); ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -102,7 +106,9 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH SURAT LAYANAN</div>
-                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">
+                                <?php echo $this->db->query("select * from tbl_surat")->num_rows(); ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,7 +120,7 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH PEMOHON SURAT KET.USAHA</div>
-                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">  <?php echo $this->db->query("select * from ket_usaha")->num_rows(); ?></div>
                         </div>
                     </div>
                 </div>
@@ -126,7 +132,7 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH PEMOHON SURAT KET.DOMISILI</div>
-                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">1</div>
                         </div>
                     </div>
                 </div>
@@ -138,7 +144,7 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH SURAT</div>
-                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">0</div>
                         </div>
                     </div>
                 </div>
